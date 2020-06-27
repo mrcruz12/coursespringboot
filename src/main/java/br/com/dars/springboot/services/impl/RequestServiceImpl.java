@@ -7,6 +7,7 @@ import br.com.dars.springboot.domain.enums.PaymentStatus;
 import br.com.dars.springboot.repository.PaymentRepository;
 import br.com.dars.springboot.repository.RequestItemRepository;
 import br.com.dars.springboot.repository.RequestRepository;
+import br.com.dars.springboot.services.ClientService;
 import br.com.dars.springboot.services.ProductService;
 import br.com.dars.springboot.services.RequestService;
 import br.com.dars.springboot.services.exceptions.ObjectNotFoundException;
@@ -34,6 +35,9 @@ public class RequestServiceImpl implements RequestService {
     private ProductService productService;
 
     @Autowired
+    private ClientService clientService;
+
+    @Autowired
     private RequestItemRepository requestItemRepo;
 
     @Override
@@ -48,6 +52,7 @@ public class RequestServiceImpl implements RequestService {
     public Request save(Request request) {
         request.setId(null);
         request.setInstant(new Date());
+        request.setClient(clientService.findById(request.getClient().getId()));
         request.getPayment().setPaymentStatus(PaymentStatus.PENDING);
         request.getPayment().setRequest(request);
 
@@ -59,11 +64,13 @@ public class RequestServiceImpl implements RequestService {
         paymentRepo.save(request.getPayment());
 
         for (RequestItem r : request.getRequestItems()){
+            r.setProduct(productService.findById(r.getProduct().getId()));
             r.setDiscount(0.0);
-            r.setPrice(productService.findById(r.getProduct().getId()).getPrice());
+            r.setPrice(r.getProduct().getPrice());
             r.setRequest(request);
         }
         requestItemRepo.saveAll(request.getRequestItems());
+        System.out.println(request);
         return request;
     }
 

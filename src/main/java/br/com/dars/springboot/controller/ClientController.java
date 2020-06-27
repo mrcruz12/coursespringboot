@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
@@ -73,5 +74,20 @@ public class ClientController {
         clientService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/picture")
+    public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name = "file") MultipartFile file) {
+        URI uri = clientService.uploadProfilePicture(file);
+
+        return ResponseEntity.created(uri).build();
+    }
+
+    @PostMapping("/picture/{id}")
+    public ResponseEntity<Void> uploadProfilePictureByCli(@PathVariable Long id, @RequestParam(name = "file") MultipartFile file) {
+        URI uri = clientService.uploadProfilePictureById(file, id);
+
+        return ResponseEntity.created(uri).build();
+    }
+
 }
 

@@ -20,7 +20,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private AddressRepository addressRepo;
+
+    @Autowired
+    private S3Service s3Service;
 
     @Override
     public Client findById(Long id) {
@@ -102,6 +107,16 @@ public class ClientServiceImpl implements ClientService {
             client.getFones().add(clientDto.getFone3());
 
         return client;
+    }
+
+    @Override
+    public URI uploadProfilePicture(MultipartFile multipartFile) {
+        return s3Service.uploadFile(multipartFile);
+    }
+
+    @Override
+    public URI uploadProfilePictureById(MultipartFile multipartFile, Long id) {
+        return s3Service.uploadFileById(multipartFile, id);
     }
 
     @Override

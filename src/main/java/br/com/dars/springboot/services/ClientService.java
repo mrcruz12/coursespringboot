@@ -5,7 +5,9 @@ import br.com.dars.springboot.domain.Client;
 import br.com.dars.springboot.dto.ClientDTO;
 import br.com.dars.springboot.dto.NewClientDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.util.List;
 
 public interface ClientService {
@@ -25,4 +27,8 @@ public interface ClientService {
     public Client fromDTO(ClientDTO clientDTO);
 
     public Client newClientFromDTO(NewClientDTO clientDto);
+
+    public URI uploadProfilePicture(MultipartFile multipartFile);
+
+    public URI uploadProfilePictureById(MultipartFile file, Long id);
 }

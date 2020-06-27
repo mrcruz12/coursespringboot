@@ -77,10 +77,6 @@ public class Client implements Serializable {
         return ClientType.toEnum(clientType);
     }
 
-    //public void setClientType(ClientType clientType) {
-//        this.clientType = clientType.getCode();
-//    }
-
     public void setClientType(Integer clientType) {
         this.clientType = clientType;
     }
