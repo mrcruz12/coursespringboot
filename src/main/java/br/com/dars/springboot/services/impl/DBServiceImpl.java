@@ -100,7 +100,7 @@ public class DBServiceImpl {
 
         cityRepo.saveAll(Arrays.asList(city1, city2, city3));
 
-        Client cli1 = new Client(null, "Ananda N A da Cruz", "ananda@gmail.com", "12332112345", ClientType.NATURALPERSON);
+        Client cli1 = new Client(null, "Ananda N A da Cruz", "darstecnologia@gmail.com", "12332112345", ClientType.NATURALPERSON);
         cli1.getFones().addAll(Arrays.asList("12982223441", "12982223442"));
 
         Address address1 = new Address(null, "Rua das Chácaras", "85", "Apto 38 bloco A2", "Jardim Oriente", "12236080", cli1, city1);
