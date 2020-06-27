@@ -8,6 +8,7 @@ import br.com.dars.springboot.repository.PaymentRepository;
 import br.com.dars.springboot.repository.RequestItemRepository;
 import br.com.dars.springboot.repository.RequestRepository;
 import br.com.dars.springboot.services.ClientService;
+import br.com.dars.springboot.services.EmailService;
 import br.com.dars.springboot.services.ProductService;
 import br.com.dars.springboot.services.RequestService;
 import br.com.dars.springboot.services.exceptions.ObjectNotFoundException;
@@ -36,6 +37,9 @@ public class RequestServiceImpl implements RequestService {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private RequestItemRepository requestItemRepo;
@@ -70,7 +74,7 @@ public class RequestServiceImpl implements RequestService {
             r.setRequest(request);
         }
         requestItemRepo.saveAll(request.getRequestItems());
-        System.out.println(request);
+        emailService.sendOrderConfirmationEmail(request);
         return request;
     }
 
