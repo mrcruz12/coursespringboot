@@ -17,9 +17,11 @@ public class NewClientDTO implements Serializable {
     @NotEmpty(message = "mandatory")
     @Email(message = "Invalid email")
     private String email;
-
     private String cpfOrCnpj;
     private Integer clientType;
+    @NotEmpty(message = "mandatory")
+    private String password;
+
     @NotEmpty(message = "mandatory")
     private String publicPlace;
     @NotEmpty(message = "mandatory")
@@ -70,6 +72,14 @@ public class NewClientDTO implements Serializable {
 
     public void setClientType(Integer clientType) {
         this.clientType = clientType;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPublicPlace() {

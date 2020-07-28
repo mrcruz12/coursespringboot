@@ -3,8 +3,10 @@ package br.com.dars.springboot.services.impl;
 import br.com.dars.springboot.domain.*;
 import br.com.dars.springboot.domain.enums.ClientType;
 import br.com.dars.springboot.domain.enums.PaymentStatus;
+import br.com.dars.springboot.domain.enums.Profile;
 import br.com.dars.springboot.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -13,6 +15,9 @@ import java.util.Arrays;
 
 @Service
 public class DBServiceImpl {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private CategoryRepository categoryRepo;
@@ -100,14 +105,18 @@ public class DBServiceImpl {
 
         cityRepo.saveAll(Arrays.asList(city1, city2, city3));
 
-        Client cli1 = new Client(null, "Ananda N A da Cruz", "darstecnologia@gmail.com", "12332112345", ClientType.NATURALPERSON);
+        Client cli1 = new Client(null, "Ananda N A da Cruz", "darstecnologia@gmail.com", "12332112345", ClientType.NATURALPERSON, bCryptPasswordEncoder.encode("123456"));
         cli1.getFones().addAll(Arrays.asList("12982223441", "12982223442"));
+        Client cli2 = new Client(null, "Matheus R da Cruz", "mrcruztech@hotmail.com", "21929104952", ClientType.NATURALPERSON, bCryptPasswordEncoder.encode("123456"));
+        cli2.addProfile(Profile.ADMIN);
+        cli1.getFones().addAll(Arrays.asList("129824587", "1298443442"));
 
         Address address1 = new Address(null, "Rua das Chácaras", "85", "Apto 38 bloco A2", "Jardim Oriente", "12236080", cli1, city1);
-        Address address2 = new Address(null, "Rua das Chácaras", "85", "condominio Terras do Vale", "Jardim da Grama", "12233550", cli1, city3);
+        Address address2 = new Address(null, "Praça Victor Hugo", "50", "", "Jardim Oriente", "12233550", cli1, city3);
+        Address address3 = new Address(null, "Rua das Chácaras", "85", "Apto 38 bloco A2", "Jardim Oriente", "12236080", cli1, city1);
 
-        cli1.getAddresses().addAll(Arrays.asList(address1, address2));
-        clientRepo.saveAll(Arrays.asList(cli1));
+        cli1.getAddresses().addAll(Arrays.asList(address1, address2, address3));
+        clientRepo.saveAll(Arrays.asList(cli1, cli2));
 
         addressRepo.saveAll(Arrays.asList(address1, address2));
 

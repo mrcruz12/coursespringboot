@@ -74,7 +74,7 @@ public class RequestServiceImpl implements RequestService {
             r.setRequest(request);
         }
         requestItemRepo.saveAll(request.getRequestItems());
-        emailService.sendOrderConfirmationEmail(request);
+        emailService.sendOrderConfirmationEmailHtml(request);
         return request;
     }
 

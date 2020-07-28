@@ -18,6 +18,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,9 @@ import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private ClientRepository clientRepo;
@@ -95,7 +99,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client newClientFromDTO(NewClientDTO clientDto) {
         System.out.println(clientDto.getClientType());
-        Client client = new Client(null, clientDto.getName(), clientDto.getEmail(), clientDto.getCpfOrCnpj(), ClientType.toEnum(clientDto.getClientType()));
+        Client client = new Client(null, clientDto.getName(), clientDto.getEmail(), clientDto.getCpfOrCnpj(), ClientType.toEnum(clientDto.getClientType()), bCryptPasswordEncoder.encode(clientDto.getPassword()));
         Optional<City> city = cityRepo.findById(clientDto.getCityId());
         Address address = new Address(null, clientDto.getPublicPlace(), clientDto.getNumber(), clientDto.getComplement(), clientDto.getNeighborhood(), clientDto.getZipCode(), client, city.get()  );
         client.getAddresses().add(address);
@@ -121,7 +125,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client fromDTO(ClientDTO clientDto) {
-       return new Client(clientDto.getId(), clientDto.getName(), clientDto.getEmail(), null, null);
+       return new Client(clientDto.getId(), clientDto.getName(), clientDto.getEmail(), null, null, null);
     }
 
 }
